@@ -28,9 +28,9 @@ def process_image(image_feed_id):
 
         result, encoded_img = cv2.imencode('.jpg', img)
 
-        # if result:
-        #     content = ContentFile(encoded_img.tobytes(), f'processed_{image_feed.image.name}')
-        #     image_feed.processed_image.save(content.name, content, save=True)
+        if result:
+            content = ContentFile(encoded_img.tobytes(), f'processed_{image_feed.image.name}')
+            image_feed.processed_image.save(content.name, content, save=True)
 
         return True
 
