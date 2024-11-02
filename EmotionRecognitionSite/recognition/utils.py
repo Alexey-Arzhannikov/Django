@@ -2,7 +2,7 @@ from fer import FER
 import cv2
 from pprint import pprint
 from django.core.files.base import ContentFile
-from .models import ImageFeed, DetectedObject
+from .models import ImageFeed, RecognizedEmotion
 
 def process_image(image_feed_id):
 
@@ -19,21 +19,13 @@ def process_image(image_feed_id):
         detector.detect_emotions(img)
         emotion, score = detector.top_emotion(img)
 
-        DetectedObject.objects.create(
-            image_feed=image_feed,
-            object_type=emotion,
-            # location=f"{startX},{startY},{endX},{endY}",
-            confidence=float(score)
+        RecognizedEmotion.objects.create(
+            info_feed=image_feed,
+            emotion=emotion,
+            confidence=score
         )
-
-        result, encoded_img = cv2.imencode('.jpg', img)
-
-        if result:
-            content = ContentFile(encoded_img.tobytes(), f'processed_{image_feed.image.name}')
-            image_feed.processed_image.save(content.name, content, save=True)
-
         return True
-
     except ImageFeed.DoesNotExist:
         print("ImageFeed not found.")
         return False
+

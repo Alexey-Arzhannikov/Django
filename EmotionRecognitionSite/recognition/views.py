@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import ImageFeedForm
-from .models import ImageFeed, DetectedObject
+from .models import ImageFeed, RecognizedEmotion
 from .utils import process_image
 # Create your views here.
 
@@ -46,12 +46,15 @@ def user_logout(request):
 @login_required
 def dashboard(request):
     image_feeds = ImageFeed.objects.filter(user=request.user)
-    emotion = DetectedObject.objects.all()
-    context = {
-        'image_feeds': image_feeds,
-        'emotion': emotion
-    }
-    return render(request, 'recognition/dashboard.html', context)
+    # list_emotions =[]
+    # for im_f in image_feeds:
+    #     emotion = RecognizedEmotion.objects.filter(info_feed_id=im_f.id)
+    #     list_emotions.append(emotion)
+    # context = {
+    #     'image_feeds': image_feeds,
+    #     'list_emotions': list_emotions
+    # }
+    return render(request, 'recognition/dashboard.html', {'image_feeds': image_feeds})
 
 
 @login_required
