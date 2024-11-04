@@ -3,8 +3,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
-from .forms import ImageFeedForm,VideoFeedForm
-from .models import ImageFeed, RecognizedEmotion
+from .forms import ImageFeedForm
+from .models import ImageFeed
 from .utils import process_image
 # Create your views here.
 
@@ -63,18 +63,6 @@ def add_image_feed(request):
         form = ImageFeedForm()
     return render(request, 'recognition/add_image_feed.html', {'form': form})
 
-@login_required
-def add_video_feed(request):
-    if request.method == 'POST':
-        form = VideoFeedForm(request.POST, request.FILES)
-        if form.is_valid():
-            video_feed = form.save(commit=False)
-            video_feed.user = request.user
-            video_feed.save()
-            return redirect('recognition:dashboard')
-    else:
-        form = VideoFeedForm()
-    return render(request, 'recognition/add_video_feed.html', {'form': form})
 
 @login_required
 def process_image_feed(request, feed_id):

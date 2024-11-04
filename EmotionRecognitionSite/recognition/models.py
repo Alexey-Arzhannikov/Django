@@ -20,16 +20,3 @@ class RecognizedEmotion(models.Model):
     def __str__(self):
         return f"{self.emotion} ({self.confidence}) on {self.info_feed.image.name}"
 
-
-class VideoFeed(models.Model):
-
-    video = models.FileField(upload_to='videos/')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.video.name}"
-
-
-class VideoEmotion(models.Model):
-    graph = models.ImageField(upload_to='graph/')
-    info_feed_video = models.ForeignKey(VideoFeed, related_name='recognized_emotions_video', on_delete=models.CASCADE)
