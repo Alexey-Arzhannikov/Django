@@ -3,6 +3,7 @@
 {% block content %}
 <h2>Dashboard</h2>
 <a href="{% url 'recognition:add_image_feed' %}" class="btn btn-primary mb-3">Add Image</a>
+<a href="{% url 'recognition:add_video_feed' %}" class="btn btn-primary mb-3">Add Video</a>
 
 {% for feed in image_feeds %}
 <div class="card mb-3">

@@ -1,7 +1,5 @@
 from fer import FER
 import cv2
-from pprint import pprint
-from django.core.files.base import ContentFile
 from .models import ImageFeed, RecognizedEmotion
 
 def process_image(image_feed_id):

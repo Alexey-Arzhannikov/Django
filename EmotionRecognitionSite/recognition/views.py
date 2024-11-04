@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import ImageFeedForm
+
+from .forms import ImageFeedForm,VideoFeedForm
 from .models import ImageFeed, RecognizedEmotion
 from .utils import process_image
 # Create your views here.
@@ -46,14 +47,6 @@ def user_logout(request):
 @login_required
 def dashboard(request):
     image_feeds = ImageFeed.objects.filter(user=request.user)
-    # list_emotions =[]
-    # for im_f in image_feeds:
-    #     emotion = RecognizedEmotion.objects.filter(info_feed_id=im_f.id)
-    #     list_emotions.append(emotion)
-    # context = {
-    #     'image_feeds': image_feeds,
-    #     'list_emotions': list_emotions
-    # }
     return render(request, 'recognition/dashboard.html', {'image_feeds': image_feeds})
 
 
@@ -71,9 +64,22 @@ def add_image_feed(request):
     return render(request, 'recognition/add_image_feed.html', {'form': form})
 
 @login_required
+def add_video_feed(request):
+    if request.method == 'POST':
+        form = VideoFeedForm(request.POST, request.FILES)
+        if form.is_valid():
+            video_feed = form.save(commit=False)
+            video_feed.user = request.user
+            video_feed.save()
+            return redirect('recognition:dashboard')
+    else:
+        form = VideoFeedForm()
+    return render(request, 'recognition/add_video_feed.html', {'form': form})
+
+@login_required
 def process_image_feed(request, feed_id):
     image_feed = get_object_or_404(ImageFeed, id=feed_id, user=request.user)
-    process_image(feed_id)  # Consider handling this asynchronously
+    process_image(feed_id)
     return redirect('recognition:dashboard')
 
 @login_required

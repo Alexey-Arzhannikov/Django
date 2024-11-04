@@ -1,5 +1,5 @@
 from django import forms
-from .models import ImageFeed
+from .models import ImageFeed, VideoFeed
 
 
 class ImageFeedForm(forms.ModelForm):
@@ -11,4 +11,17 @@ class ImageFeedForm(forms.ModelForm):
         }
         help_texts = {
             'image': 'Upload an image file.',
+        }
+
+
+class VideoFeedForm(forms.ModelForm):
+    class Meta:
+        model=VideoFeed
+        fields=['video']
+
+        widgets = {
+            'video': forms.FileInput(attrs={'accept': 'video/*'}),
+        }
+        help_texts = {
+            'video': 'Upload an video file.',
         }
