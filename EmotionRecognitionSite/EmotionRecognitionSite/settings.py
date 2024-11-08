@@ -138,5 +138,5 @@ LOGOUT_URL = '/recognition/logout/'
 
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'recognition/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'recognition/media')

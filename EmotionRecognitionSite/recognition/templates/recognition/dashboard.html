@@ -3,29 +3,60 @@
 {% block content %}
 <h2>Dashboard</h2>
 <a href="{% url 'recognition:add_image_feed' %}" class="btn btn-primary mb-3">Add Image</a>
+<a href="{% url 'recognition:add_video_feed' %}" class="btn btn-primary mb-3">Add Video</a>
 
 {% for feed in image_feeds %}
-<div class="card mb-3">
-    <div class="card-header">
-        <a href="{% url 'recognition:process_feed' feed.id %}" class="btn btn-secondary">Process Image</a>
-    </div>
-    <div class="card-body">
-        <a href="{{ feed.image.url }}" target="_blank">
-            <img src="{{ feed.image.url }}" alt="Original Image" style="width: 50px; height: 50px;">
-        </a>
+    <div class="card mb-3">
+        <div class="card-header">
+            <a href="{% url 'recognition:process_feed' feed.id %}" class="btn btn-secondary">Process Image</a>
+        </div>
+        <div class="card-body">
+            <a href="{{ feed.image.url }}" target="_blank">
+                <img src="{{ feed.image.url }}" alt="Original Image" style="width: 50px; height: 50px;">
+            </a>
 
-        <ul>
-            {% for obj in feed.recognized_emotions.all %}
-                <li>{{ obj.emotion }} - {{ obj.confidence|floatformat:2 }}</li>
-            {% endfor %}
-        </ul>
+            <ul>
+                {% for obj in feed.recognized_emotions.all %}
+                    <li>{{ obj.emotion }} - {{ obj.confidence|floatformat:2 }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <form action="{% url 'recognition:delete_image' feed.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
     </div>
-    <form action="{% url 'recognition:delete_image' feed.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Delete</button>
-    </form>
-</div>
+{% endfor %}
+
+
+{% for feed in video_feeds %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <a href="{% url 'recognition:process_video_feed' feed.id %}" class="btn btn-secondary">Process Video</a>
+        </div>
+        <div class="card-body">
+            <a href="{{ feed.video.url }}" target="_blank">
+                <video width="320" height="240" controls>
+                    <source src="{{ feed.video.url }}">
+                </video>
+            </a>
+        </div>
+        {% if feed.processed_video %}
+        <div class="card-body">
+            <a href="{{ feed.processed_video.url }}" target="_blank">
+                <video width="320" height="240" controls>
+                    <source src="{{ feed.processed_video.url }}">
+                </video>
+            </a>
+        {% endif %}
+        </div>
+        {% if feed.graph_emotion %}
+            <div class="card-body">
+                <a href="{{ feed.graph_emotion.url }}" target="_blank">
+                    <img src="{{ feed.graph_emotion.url }}" alt="Graph of emotions" style="width: 320px; height: 240px;">
+                </a>
+            </div>
+        {% endif %}
+    </div>
 {% endfor %}
 {% endblock %}
-
-
