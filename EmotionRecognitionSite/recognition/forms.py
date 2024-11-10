@@ -16,9 +16,8 @@ class ImageFeedForm(forms.ModelForm):
 
 class VideoFeedForm(forms.ModelForm):
     class Meta:
-        model=VideoFeed
-        fields=['video']
-
+        model = VideoFeed
+        fields = ['video']
         widgets = {
             'video': forms.FileInput(attrs={'accept': 'video/*'}),
         }

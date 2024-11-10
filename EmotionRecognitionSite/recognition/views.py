@@ -2,14 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from torch.distributed.autograd import context
 
 from .forms import ImageFeedForm, VideoFeedForm
 from .models import ImageFeed, VideoFeed
 from .utils import process_image, process_video
-
-
-# Create your views here.
-
 
 
 def home(request):
@@ -50,7 +47,11 @@ def user_logout(request):
 def dashboard(request):
     image_feeds = ImageFeed.objects.filter(user=request.user)
     video_feeds = VideoFeed.objects.filter(user=request.user)
-    return render(request, 'recognition/dashboard.html', {'image_feeds': image_feeds,'video_feeds': video_feeds })
+    context = {
+        'image_feeds': image_feeds,
+        'video_feeds': video_feeds
+    }
+    return render(request, 'recognition/dashboard.html', context)
 
 
 @login_required
@@ -68,18 +69,6 @@ def add_image_feed(request):
 
 
 @login_required
-def process_image_feed(request, feed_id):
-    image_feed = get_object_or_404(ImageFeed, id=feed_id, user=request.user)
-    process_image(feed_id)
-    return redirect('recognition:dashboard')
-
-@login_required
-def process_video_feed(request, feed_video_id):
-    video_feed = get_object_or_404(VideoFeed, id=feed_video_id, user=request.user)
-    process_video(feed_video_id)
-    return redirect('recognition:dashboard')
-
-@login_required
 def add_video_feed(request):
     if request.method == 'POST':
         form = VideoFeedForm(request.POST, request.FILES)
@@ -92,8 +81,30 @@ def add_video_feed(request):
         form = VideoFeedForm()
     return render(request, 'recognition/add_video_feed.html', {'form': form})
 
+
+@login_required
+def process_image_feed(request, feed_id):
+    image_feed = get_object_or_404(ImageFeed, id=feed_id, user=request.user)
+    process_image(feed_id)
+    return redirect('recognition:dashboard')
+
+
+@login_required
+def process_video_feed(request, feed_video_id):
+    video_feed = get_object_or_404(VideoFeed, id=feed_video_id, user=request.user)
+    process_video(feed_video_id)
+    return redirect('recognition:dashboard')
+
+
 @login_required
 def delete_image(request, image_id):
     image = get_object_or_404(ImageFeed, id=image_id, user=request.user)                                     # Ensuring only the owner can delete
     image.delete()
+    return redirect('recognition:dashboard')
+
+
+@login_required
+def delete_video(request, video_id):
+    video = get_object_or_404(VideoFeed, id=video_id, user=request.user)                                     # Ensuring only the owner can delete
+    video.delete()
     return redirect('recognition:dashboard')
