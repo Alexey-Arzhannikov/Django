@@ -42,7 +42,7 @@
 <details><summary><b>Установка и настройка</b></summary>
 Проект реализован на языке python с использованием фрэймворка Django и библиотеки FER.<br>
 Для работы понадобится python (использовался python 3.12).<br>
-Необходимо установить слудующее:
+Необходимо установить следующее:
 
 Фреймворк Django
 ```
@@ -52,7 +52,7 @@ pip install Django==5.1.2
 ```
 pip install psycopg2==2.9.10
 ```
-библиотека <a href="https://github.com/JustinShenk/fer/blob/master/README.md">FER</a>
+библиотеку <a href="https://github.com/JustinShenk/fer/blob/master/README.md">FER</a>
 ```
 pip install fer==22.5.1
 ```
@@ -207,6 +207,16 @@ EmotionRecognitionSite
 ```
 </li>
 </ul>
+Создайте миграцию для приложения.
+
+```
+python manage.py makemigrations
+```
+Примените миграцию к БД.
+
+```
+python manage.py migrate.
+```
 </details>
 <details><summary><b>Утилиты</b></summary>
 Функции реализованы в файле utils.py

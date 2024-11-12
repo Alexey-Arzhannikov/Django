@@ -53,7 +53,7 @@ def process_video(info_feed_video_id):
         raw_data = video.analyze(detector, display=False)
 
         a = os.getcwd()
-        video_name = f'{a}/recognition/media/fer_video/{info_feed_video.video.name}'
+        video_name = f'{a}/recognition/media/{info_feed_video.video.name}'
         with open(video_name, 'rb') as f:
             video_content = f.read()
             info_feed_video.processed_video.save(f'processed_video/{info_feed_video.id}.mp4', ContentFile(video_content))

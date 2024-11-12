@@ -39,11 +39,17 @@
                     <source src="{{ feed_v.video.url }}">
                 </video>
             </a>
-
+            {% if feed_v.processed_video %}
+            <a href="{{ feed_v.processed_video.url }}" target="_blank">
+                <video width="320" height="240" controls>
+                    <source src="{{ feed_v.processed_video.url }}">
+                </video>
+            </a>
+            {% endif %}
             {% if feed_v.graph_emotion %}
             <div class="card-body">
                 <a href="{{ feed_v.graph_emotion.url }}" target="_blank">
-                    <img src="{{ feed_v.graph_emotion.url }}" alt="Graph of emotions" style="width: 320px; height: 240px;">
+                    <img src="{{ feed_v.graph_emotion.url }}" alt="Graph of emotions" style="width: 75px; height: 75px;">
                 </a>
             </div>
             {% endif %}
